@@ -1,6 +1,8 @@
 import React from "react";
-import axios from "axios";
+
 import LowerBoard from "./LowerBoard";
+import Controls from "./Controls";
+import axios from "axios";
 
 class Board extends React.Component {
   state = {
@@ -9,7 +11,7 @@ class Board extends React.Component {
     upperBoard: ["", "", "", "", "", "", ""]
   };
 
-  componentDidMount() {
+  newWord = () => {
     axios
       .get("http://tom.mo2.dinksurveys.net/api/1.0/getWord?letters=5")
       .then(({ data }) => {
@@ -31,6 +33,10 @@ class Board extends React.Component {
 
         this.setState({ lowerBoard: wordArray });
       });
+  };
+
+  componentDidMount() {
+    this.newWord();
   }
 
   handleUpperClick = e => {
@@ -85,8 +91,8 @@ class Board extends React.Component {
           letters={this.state.lowerBoard}
           handleClick={this.handleLowerClick}
         />
-        {/* <Feedback />
-        <Controls /> */}
+        {/* <Feedback /> */}
+        <Controls newWord={this.newWord} />
       </div>
     );
   }
