@@ -8,10 +8,18 @@ class Board extends React.Component {
   state = {
     word: "",
     lowerBoard: ["", "", "", "", "", "", ""],
-    upperBoard: ["", "", "", "", "", "", ""]
+    upperBoard: ["", "", "", "", "", "", ""],
+    revealWord: false,
+    response: ""
   };
 
   newWord = () => {
+    this.setState({
+      upperBoard: ["", "", "", "", "", "", ""],
+      revealAnswer: false,
+      response: ""
+    });
+
     axios
       .get("http://tom.mo2.dinksurveys.net/api/1.0/getWord?letters=5")
       .then(({ data }) => {
@@ -75,6 +83,14 @@ class Board extends React.Component {
     }
   };
 
+  showAnswer = () => {
+    this.setState({ revealAnswer: true });
+  };
+
+  setResponse = response => {
+    this.setState({ response });
+  };
+
   render() {
     return (
       <div id="board">
@@ -91,8 +107,15 @@ class Board extends React.Component {
           letters={this.state.lowerBoard}
           handleClick={this.handleLowerClick}
         />
-        {/* <Feedback /> */}
-        <Controls newWord={this.newWord} />
+        <Controls
+          setResponse={this.setResponse}
+          showAnswer={this.showAnswer}
+          revealAnswer={this.state.revealAnswer}
+          response={this.state.response}
+          word={this.state.word}
+          upperArray={this.state.upperBoard}
+          newWord={this.newWord}
+        />
       </div>
     );
   }
